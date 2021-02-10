@@ -7,7 +7,7 @@ app.get('',(req,res)=>{
     res.send("HI THIS IS AN WHEATHER APP");
 })
 app.get('/weather',(req,res)=>{
-    res.send("this is wheather end point");
+    res.send("this is wheather end");
 })
 app.get('*',(req,res)=>{
     res.send("Page not found");
