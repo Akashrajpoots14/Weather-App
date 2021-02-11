@@ -3,6 +3,15 @@ const hbs = require('hbs');
 const path = require('path');
 const app = express();
 
+const publicStaticDirPath = path.join(__dirname,'../public'); 
+const partialsPath = path.join(__dirname,'../templates/partials');
+const viewPath = path.join(__dirname,'../templates/views');
+
+app.set('view engine',hbs);
+app.set('views',viewPath);
+app.use(express.static(publicStaticDirPath));
+
+
 const port = process.env.PORT || 3000;
 
 app.get('',(req,res)=>{
