@@ -19,11 +19,22 @@ const port = process.env.PORT || 3000;
 app.get('',(req,res)=>{
     res.send("HI THIS IS AN WHEATHER APP");
 })
+//localhost:3000/weather?address=itarsi
 app.get('/weather',(req,res)=>{
     const address = req.query.address;
 
-    weatherData(address,(result)=>{
-        console.log(result);
+    weatherData(address,(error,{temprature,description,cityName})=>{
+        if(error){
+            return res.send({
+                error
+            })
+        }
+        console.log(temprature,description,cityName);
+        res.send({
+            temprature,
+            description,
+            cityName
+        })
     
     })
 });
