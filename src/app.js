@@ -1,55 +1,60 @@
-const express =  require('express');
-const hbs = require('hbs');
-const path = require('path');
+const express = require('express');
+const hbs = require("hbs");
+const path = require("path");
 const app = express();
 
 const weatherData = require('../utils/weatherData');
 
-const publicStaticDirPath = path.join(__dirname,'../public'); 
-const partialsPath = path.join(__dirname,'../templates/partials');
-const viewPaths = path.join(__dirname,'../templates/views');
+const port = process.env.PORT || 3000
 
-app.set('view engine','hbs');
-app.set('views',viewPaths);
+const publicStaticDirPath = path.join(__dirname, '../public')
+
+const viewsPath = path.join(__dirname, '../templates/views');
+
+const partialsPath = path.join(__dirname, '../templates/partials');
+
+app.set('view engine', 'hbs');
+app.set('views', viewsPath);
 hbs.registerPartials(partialsPath);
 app.use(express.static(publicStaticDirPath));
 
-
-const port = process.env.PORT || 3000;
-
-app.get('',(req,res)=>{
-    res.render('index',{
-        title:'Weather App'
+app.get('', (req, res) => {
+    res.render('index', {
+        title: 'Weather App'
     })
 })
-//localhost:3000/weather?address=itarsi
-app.get('/weather',(req,res)=>{
-    const address = req.query.address;
-    if(!address){
+
+//localhost:3000/weather?address=lahore
+app.get('/weather', (req, res) => {
+    const address = req.query.address
+    if(!address) {
         return res.send({
-            error : "You must enter the address in search box "
+            error: "You must enter address in search text box"
         })
     }
 
-    weatherData(address,(error,{temprature,description,cityName})=>{
-        if(error){
+    weatherData(address, (error, {temperature, description, cityName} = {}) => {
+        if(error) {
             return res.send({
                 error
             })
         }
-        console.log(temprature,description,cityName);
+        console.log(temperature, description, cityName);
         res.send({
-            temprature,
+            temperature,
             description,
             cityName
         })
-    
     })
 });
-app.get('*',(req,res)=>{
-    res.send("Page not found");
+
+app.get("*", (req, res) => {
+    res.render('404', {
+        title: "page not found"
+    })
 })
 
-app.listen(port,()=>{
-    console.log("Server is Running  on port",port);
-})               
+
+app.listen(port, () => {
+    console.log("Server is up and running on port: ", port);
+})
